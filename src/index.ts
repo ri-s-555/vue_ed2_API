@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express'
 import { MOCK_PRODUCTS, IProduct } from './controlers/product'
+import { MOCK_CARTS } from './controlers/carts'
+import { MOCK_USERS } from './controlers/users'
 import cors from 'cors'
 const app = express()
 const port: number = 3000
@@ -23,14 +25,13 @@ app.get('/products/:id', (req: Request, res: Response) => {
 
 
 
-// app.post('')
 
-
-
-app.get('/cart', (req: Request, res: Response) => {
+app.get('/cart/:id', (req: Request, res: Response) => {
+  const id = parseInt(req.params.id)
+  const cart = MOCK_CARTS.find((cart) => cart.id === id)
   res.status(200).json(cart)
 })
-app.post('/cart', (req: Request, res: Response) => {
+app.post('/cart/:id', (req: Request, res: Response) => {
   const product = req.body
   cart.push(product)
   res.status(201).json(cart)
@@ -40,6 +41,12 @@ app.delete('/cart/:id', (req: Request, res: Response) => {
   const id = parseInt(req.params.id)
   cart = cart.filter(item => item.id !== id)
   res.status(200).json(cart)
+})
+
+app.get('/user/:id', (req: Request, res: Response) => {
+  const id = parseInt(req.params.id)
+  const user = MOCK_USERS.find(user => user.id === id)
+  res.status(200).json(user)
 })
 
 app.listen(port, () => {
