@@ -12,11 +12,6 @@ app.use(cors())
 
 let cart: IProduct[] = []
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!')
-  res.status(200)  
-})
-
 app.get('/products', (req: Request, res: Response) => {
   res.status(200).json(MOCK_PRODUCTS)
 })
@@ -25,16 +20,16 @@ app.get('/products/:id', (req: Request, res: Response) => {
   res.send(product)
   res.status(200)
 })
-app.get('/cart', (req: Request, res: Response) => {
-  res.status(200).json(cart)
-})
+
 
 
 // app.post('')
-app.post('/products/:id', (req: Request, res: Response) => {
-  res.send('Product added to cart');
-});
 
+
+
+app.get('/cart', (req: Request, res: Response) => {
+  res.status(200).json(cart)
+})
 app.post('/cart', (req: Request, res: Response) => {
   const product = req.body
   cart.push(product)
