@@ -27,10 +27,10 @@ app.get('/products/:id', (req: Request, res: Response) => {
 
 
 
-app.get('/cart', (req: Request, res: Response) => {
+app.get('/cart/:id', (req: Request, res: Response) => {
   res.status(200).json(cart)
 })
-app.post('/cart', (req: Request, res: Response) => {
+app.post('/cart/:id', (req: Request, res: Response) => {
   const product = req.body
   cart.push(product)
   res.status(201).json(cart)
