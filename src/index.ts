@@ -3,13 +3,18 @@ import { MOCK_PRODUCTS, IProduct } from './controlers/product'
 import { MOCK_CARTS, addToCardById } from './controlers/carts';
 import { IUser, MOCK_USERS } from './controlers/users';
 import cors from 'cors';
+import { check, validationResult } from 'express-validator';
+import { register, login, getUser } from './controlers/auth';
+import auth from './middleware/auth';
+import connectDB from './config/db';
 const app = express()
 const port: number = 3000
 
-
+connectDB();
 // Middleware для работы с JSON и CORS
 app.use(express.json())
 app.use(cors())
+
 
 let cart: IProduct[] = [] //ненастоящая переменная, переписать на настоящие данные
 
@@ -95,8 +100,21 @@ app.delete('/cart/:id', (req: Request, res: Response) => {
   cart = cart.filter(item => item.id !== id)
   res.status(200).json(cart)
 })
-
-
+app.post('/auth/register', [
+  check('username', 'Username is required').not().isEmpty(),
+  check('email', 'Please include a valid email').isEmail(),
+  check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
+], (req: Request, res: Response):void => {
+  register(req, res)
+})
+app.post('/auth/login', (req: Request, res: Response):void => {
+  login(req, res)
+})
+app.get('/auth/user', (req: Request, res: Response):void => {
+  auth(req, res, () => {
+    getUser(req, res)
+  })
+})
 /**
  * Запуск сервера
  */
