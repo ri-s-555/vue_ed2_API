@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import { MOCK_PRODUCTS, IProduct } from './controlers/product'
-import { MOCK_CARTS } from './controlers/carts';
+import { MOCK_CARTS, addToCardById } from './controlers/carts';
 import { IUser, MOCK_USERS } from './controlers/users';
 import cors from 'cors';
 const app = express()
@@ -11,7 +11,7 @@ const port: number = 3000
 app.use(express.json())
 app.use(cors())
 
-let cart: IProduct[] = []
+let cart: IProduct[] = [] //ненастоящая переменная, переписать на настоящие данные
 
 /**
  * Получение пользователя по id
@@ -29,6 +29,8 @@ app.get("/user/:id", (req: Request, res: Response) => {
  * @returns {Object} - Массив продуктов в корзине в формате JSON
  */
 app.get('/cart/:id', (req: Request, res: Response) => {
+  const id = parseInt (req.params.id)
+  const cart = MOCK_CARTS.find(cart => cart.id === id)
   res.status(200).json(cart)
 })
 
@@ -45,8 +47,8 @@ app.get('/products', (req: Request, res: Response) => {
  * @param {string} id - Идентификатор продукта
  * @returns {Object} - Продукт, соответствующий указанному id
  */
-app.get('/products/:id', (req: Request, res: Response) => {
-  const product = MOCK_PRODUCTS.find((product) => product.id === parseInt(req.params.id));
+app.get('/products/:id', (req: Request, res: Response) => { 
+  const product = MOCK_PRODUCTS.find((product) => product.id === parseInt(req.params.id)); 
   if (product) {
     res.status(200).json(product);
   } else {
@@ -59,11 +61,19 @@ app.get('/products/:id', (req: Request, res: Response) => {
  * @param {Object} product - Объект продукта, передаваемый в теле запроса
  * @returns {Object} - Обновленный массив продуктов в корзине в формате JSON и статус 201
  */
-app.post('/cart', (req: Request, res: Response) => {
-  const product = req.body
-  cart.push(product)
+app.post('/cart/:id', (req: Request, res: Response) => {
+  console.log(33456)
+  // const id = parseInt (req.params.id)
+  // const cart = MOCK_CARTS.find(cart => cart.id === id)
+  // const addToCardById = addToCardById(id, products: IProduct[])
+
+
+  // const product = req.body
+  // console.log(req.body)
+  // cart.push(product)
   res.status(201).json(cart)
 })
+
 
 /**
  *  Подтверждение добавления продукта в корзину
