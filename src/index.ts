@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express'
-import { MOCK_PRODUCTS, IProduct } from './controlers/product'
-import { MOCK_CARTS, addToCardById } from './controlers/carts';
-import { IUser, MOCK_USERS } from './controlers/users';
+import { MOCK_PRODUCTS, IProduct } from './controllers/product'
+import { MOCK_CARTS, addToCardById } from './controllers/carts';
+import { IUser, MOCK_USERS } from './controllers/users';
 import cors from 'cors';
 import { check, validationResult } from 'express-validator';
-import { register, login, getUser } from './controlers/auth';
+import { register, login, getUser } from './controllers/auth';
 import auth from './middleware/auth';
 import connectDB from './config/db';
 const app = express()
@@ -100,21 +100,47 @@ app.delete('/cart/:id', (req: Request, res: Response) => {
   cart = cart.filter(item => item.id !== id)
   res.status(200).json(cart)
 })
+
+
+/**
+ * @route POST /auth/register
+ * @description Регистрация нового пользователя.
+ * @param {Request} req - Объект запроса, содержащий данные пользователя для регистрации.
+ * @param {Response} res - Объект ответа, используемый для отправки ответа клиенту.
+ * @returns {void}
+ */
 app.post('/auth/register', [
   check('username', 'Username is required').not().isEmpty(),
   check('email', 'Please include a valid email').isEmail(),
   check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
-], (req: Request, res: Response):void => {
-  register(req, res)
-})
-app.post('/auth/login', (req: Request, res: Response):void => {
-  login(req, res)
-})
-app.get('/auth/user', (req: Request, res: Response):void => {
+], (req: Request, res: Response): void => {
+  register(req, res);
+});
+
+/**
+ * @route POST /auth/login
+ * @description Вход пользователя в систему.
+ * @param {Request} req - Объект запроса, содержащий данные для входа.
+ * @param {Response} res - Объект ответа, используемый для отправки ответа клиенту.
+ * @returns {void}
+ */
+app.post('/auth/login', (req: Request, res: Response): void => {
+  login(req, res);
+});
+
+/**
+ * @route GET /auth/user
+ * @description Получение данных текущего пользователя.
+ * @param {Request} req - Объект запроса, содержащий информацию о пользователе.
+ * @param {Response} res - Объект ответа, используемый для отправки ответа клиенту.
+ * @returns {void}
+ */
+app.get('/auth/user', (req: Request, res: Response): void => {
   auth(req, res, () => {
-    getUser(req, res)
-  })
-})
+    getUser(req, res);
+  });
+});
+
 /**
  * Запуск сервера
  */

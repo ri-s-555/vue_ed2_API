@@ -25,3 +25,9 @@ export const MOCK_USERS = [
     },
 ]
 
+// _id: $oid":"59b99db4cfa9a34dcd7885b6
+// name: Ned Stark
+// email:  sean_bean@gameofthron.es
+// password:
+// $2a$12$zMb1y8pyPoiE36bgrTJ.oerf6tM3cr1qDWbY23cO7T/BZz2TXiO.2
+// 12345qqq
